@@ -35,17 +35,27 @@ export function Navbar() {
   return (
     <header className="sticky top-0 z-40 w-full border-b border-slate-200 bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/80">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-        {/* Brand */}
-        <Link href="/" className="flex items-center space-x-2.5">
-          <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-[#172554] text-white shadow-sm">
-            <ShieldAlert className="h-5 w-5 text-teal-400" />
-          </div>
-          <div className="flex flex-col">
-            <span className="text-xl font-bold tracking-tight text-[#172554]">
-              Civic<span className="text-[#0D9488]">Lens</span>
+        {/* Brand & Status */}
+        <div className="flex items-center space-x-4">
+          <Link href="/" className="flex items-center space-x-2.5 group">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-slate-900 text-white shadow-sm ring-1 ring-slate-800 group-hover:bg-[#172554] transition-colors">
+              <ShieldAlert className="h-5 w-5 text-teal-400" />
+            </div>
+            <div className="flex flex-col">
+              <span className="text-xl font-bold tracking-tight text-slate-900">
+                Civic<span className="text-[#0D9488]">Lens</span>
+              </span>
+            </div>
+          </Link>
+
+          <div className="hidden lg:flex items-center gap-1.5 rounded-full border border-emerald-200 bg-emerald-50/70 px-2.5 py-0.5 text-[11px] font-medium text-emerald-800">
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
             </span>
+            <span>Live Civic Network</span>
           </div>
-        </Link>
+        </div>
 
         {/* Desktop Nav */}
         <nav className="hidden md:flex md:items-center md:space-x-1 lg:space-x-2">

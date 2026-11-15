@@ -21,10 +21,11 @@ export const dynamic = "force-dynamic";
 export default async function IssuesPage({ searchParams }: IssuesPageProps) {
   let complaints: any[] = [];
   try {
+    const query = searchParams.q || (searchParams as any).search || "";
     complaints = await ComplaintService.getPublicComplaints({
       category: searchParams.category as IssueCategory | undefined,
       status: searchParams.status as ComplaintStatus | undefined,
-      search: searchParams.q,
+      search: query || undefined,
     });
   } catch (error) {
     console.error("Failed to load public complaints:", error);
