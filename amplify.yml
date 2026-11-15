@@ -1,0 +1,20 @@
+version: 1
+frontend:
+  phases:
+    preBuild:
+      commands:
+        - npm ci --cache .npm --prefer-offline
+        - npx prisma generate
+    build:
+      commands:
+        - env | grep -e DATABASE_URL -e NEXTAUTH_SECRET -e NEXTAUTH_URL -e AWS_REGION -e S3_BUCKET_NAME -e BEDROCK_MODEL_ID >> .env.production
+        - npm run build
+  artifacts:
+    baseDirectory: .next
+    files:
+      - '**/*'
+  cache:
+    paths:
+      - .next/cache/**/*
+      - .npm/**/*
+      - node_modules/**/*

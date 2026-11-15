@@ -1,0 +1,120 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum Role {
+  CITIZEN
+  ADMIN
+}
+
+enum Category {
+  ROADS_AND_POTHOLES
+  GARBAGE_AND_WASTE
+  WATER_SUPPLY_AND_LEAKAGE
+  STREETLIGHTS_AND_ELECTRICITY
+  DRAINAGE_AND_SANITATION
+  PUBLIC_INFRASTRUCTURE
+  OTHER
+}
+
+enum Severity {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+enum ComplaintStatus {
+  SUBMITTED
+  UNDER_REVIEW
+  APPROVED
+  IN_PROGRESS
+  RESOLVED
+  REJECTED
+}
+
+model User {
+  id           String        @id @default(cuid())
+  name         String
+  email        String        @unique
+  passwordHash String
+  role         Role          @default(CITIZEN)
+  complaints   Complaint[]
+  adminRemarks AdminRemark[]
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+
+  @@index([email])
+  @@index([role])
+}
+
+model Complaint {
+  id           String             @id @default(cuid())
+  referenceId  String             @unique // e.g., CIV-2026-9281
+  title        String
+  description  String             @db.Text
+  aiSummary    String?            @db.Text
+  category     Category
+  severity     Severity           @default(MEDIUM)
+  status       ComplaintStatus    @default(SUBMITTED)
+  address      String
+  latitude     Float?
+  longitude    Float?
+  userId       String
+  user         User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  images       ComplaintImage[]
+  history      ComplaintHistory[]
+  adminRemarks AdminRemark[]
+  createdAt    DateTime           @default(now())
+  updatedAt    DateTime           @updatedAt
+
+  @@index([status])
+  @@index([category])
+  @@index([severity])
+  @@index([createdAt])
+  @@index([userId])
+}
+
+model ComplaintImage {
+  id               String    @id @default(cuid())
+  complaintId      String
+  complaint        Complaint @relation(fields: [complaintId], references: [id], onDelete: Cascade)
+  s3Key            String
+  url              String
+  originalFilename String
+  mimeType         String
+  fileSize         Int
+  createdAt        DateTime  @default(now())
+
+  @@index([complaintId])
+}
+
+model ComplaintHistory {
+  id             String          @id @default(cuid())
+  complaintId    String
+  complaint      Complaint       @relation(fields: [complaintId], references: [id], onDelete: Cascade)
+  previousStatus ComplaintStatus
+  newStatus      ComplaintStatus
+  remarks        String?         @db.Text
+  changedBy      String
+  createdAt      DateTime        @default(now())
+
+  @@index([complaintId])
+}
+
+model AdminRemark {
+  id          String    @id @default(cuid())
+  complaintId String
+  complaint   Complaint @relation(fields: [complaintId], references: [id], onDelete: Cascade)
+  adminId     String
+  admin       User      @relation(fields: [adminId], references: [id], onDelete: Cascade)
+  remark      String    @db.Text
+  createdAt   DateTime  @default(now())
+
+  @@index([complaintId])
+}
