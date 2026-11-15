@@ -31,7 +31,7 @@ export function BedrockInsightsCard() {
       }
 
       setInsight(data.insight);
-      toast.success("Community intelligence synthesized with open-source GenAI!");
+      toast.success("Summary generated.");
     } catch (err: any) {
       toast.error(err.message || "Failed to fetch community insights");
     } finally {
@@ -49,13 +49,13 @@ export function BedrockInsightsCard() {
             </div>
             <div>
               <CardTitle className="text-base text-slate-900 flex items-center gap-2">
-                Open-Source Community Intelligence Brief
+                Community Trends Summary
                 <span className="rounded bg-teal-100 px-2 py-0.5 text-[10px] font-semibold text-teal-800">
-                  Grounded in Live Data
+                  Live Data
                 </span>
               </CardTitle>
               <CardDescription className="text-xs">
-                Synthesize municipal issue patterns and bottleneck hotspots using open-source GenAI (Llama 3.3 / Mistral via OpenRouter).
+                Summarizes common complaints and recurring problem areas based on current reports.
               </CardDescription>
             </div>
           </div>
@@ -73,7 +73,7 @@ export function BedrockInsightsCard() {
             ) : (
               <>
                 <Sparkles className="mr-1.5 h-3.5 w-3.5 text-teal-400" />
-                Generate Intelligence Brief
+                Generate Summary
               </>
             )}
           </Button>
@@ -97,7 +97,7 @@ export function BedrockInsightsCard() {
         ) : (
           !unavailable && (
             <p className="text-xs text-slate-500 italic">
-              Click &quot;Generate Intelligence Brief&quot; above to have open-source models analyze live complaint frequencies, geographic hotspots, and turnaround times.
+              Click &quot;Generate Summary&quot; to review recurring complaints, frequent hotspots, and current progress.
             </p>
           )
         )}

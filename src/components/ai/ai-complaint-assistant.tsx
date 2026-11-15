@@ -52,7 +52,7 @@ export function AIComplaintAssistant({ onApplySuggestion }: AIAssistantProps) {
       }
 
       setAiResult(data.data);
-      toast.success("Open-source model structured your complaint successfully!");
+      toast.success("Draft generated. Review and edit any field below.");
     } catch (err: any) {
       toast.error(err.message || "Network error while connecting to AI service");
     } finally {
@@ -77,11 +77,10 @@ export function AIComplaintAssistant({ onApplySuggestion }: AIAssistantProps) {
           </div>
           <div>
             <h4 className="text-sm font-semibold text-slate-900 flex items-center gap-1.5">
-              Open-Source AI Assistant
-              <Badge variant="teal" className="text-[10px] py-0">Llama 3.3 / OpenRouter</Badge>
+              Drafting Assistant
             </h4>
             <p className="text-xs text-slate-600">
-              Type what happened informally. Open-source GenAI will structure it into an official municipal report.
+              Describe the problem in your own words. The assistant will organize it into a clear report.
             </p>
           </div>
         </div>
@@ -92,7 +91,7 @@ export function AIComplaintAssistant({ onApplySuggestion }: AIAssistantProps) {
           onClick={() => setIsOpen(!isOpen)}
           className={isOpen ? "border-teal-300 text-teal-800" : "bg-[#0D9488] hover:bg-[#0F766E] text-white"}
         >
-          {isOpen ? "Close Assistant" : "Use GenAI Assistant"}
+          {isOpen ? "Close Assistant" : "Help Me Write This"}
         </Button>
       </div>
 
@@ -100,7 +99,7 @@ export function AIComplaintAssistant({ onApplySuggestion }: AIAssistantProps) {
         <div className="mt-4 space-y-3 pt-3 border-t border-teal-200/60">
           <div>
             <label className="text-xs font-medium text-slate-700 block mb-1">
-              Your informal notes or description:
+              Describe what happened:
             </label>
             <Textarea
               value={prompt}
@@ -112,7 +111,7 @@ export function AIComplaintAssistant({ onApplySuggestion }: AIAssistantProps) {
 
           <div className="flex items-center justify-between">
             <span className="text-[11px] text-slate-500">
-              Open Source Models (Llama 3.3, Mistral, Qwen) • Strictly preserves your facts
+              Only uses details you provide — nothing added.
             </span>
             <Button
               type="button"
@@ -124,12 +123,12 @@ export function AIComplaintAssistant({ onApplySuggestion }: AIAssistantProps) {
               {loading ? (
                 <>
                   <Loader2 className="mr-1.5 h-3.5 w-3.5 animate-spin text-teal-400" />
-                  Generating Structured Report...
+                  Formatting...
                 </>
               ) : (
                 <>
                   <Sparkles className="mr-1.5 h-3.5 w-3.5 text-teal-400" />
-                  Structure With Open AI
+                  Format Report
                 </>
               )}
             </Button>
