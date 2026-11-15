@@ -16,14 +16,10 @@ export default withAuth(
     return NextResponse.next();
   },
   {
+    secret: process.env.NEXTAUTH_SECRET || "civiclens-super-secure-production-secret-12345",
     callbacks: {
-      authorized: ({ token, req }) => {
-        const pathname = req.nextUrl.pathname;
-        // Require token for /dashboard and /admin routes
-        if (pathname.startsWith("/dashboard") || pathname.startsWith("/admin")) {
-          return !!token;
-        }
-        return true;
+      authorized: ({ token }) => {
+        return !!token;
       },
     },
   }
