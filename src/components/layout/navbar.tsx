@@ -44,9 +44,6 @@ export function Navbar() {
             <span className="text-xl font-bold tracking-tight text-[#172554]">
               Civic<span className="text-[#0D9488]">Lens</span>
             </span>
-            <span className="hidden -mt-1 text-[10px] font-medium text-slate-500 sm:inline-block">
-              Municipal Intelligence Platform
-            </span>
           </div>
         </Link>
 

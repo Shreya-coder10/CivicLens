@@ -5,15 +5,8 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import {
-  ShieldAlert,
-  Sparkles,
-  MapPin,
   CheckCircle2,
-  Clock,
   ArrowRight,
-  TrendingUp,
-  FileCheck2,
-  Users2,
   Construction,
   Trash2,
   Droplets,
@@ -84,8 +77,8 @@ export function LandingPageContent({ stats, recentComplaints }: LandingProps) {
     },
     {
       num: "02",
-      title: "Amazon Bedrock AI Structures",
-      desc: "Our GenAI assistant automatically suggests categories, assesses severity, and refines your text.",
+      title: "AI Formats Your Report",
+      desc: "The assistant suggests a category, severity level, and rewrites your note into a clear complaint.",
     },
     {
       num: "03",
@@ -101,20 +94,20 @@ export function LandingPageContent({ stats, recentComplaints }: LandingProps) {
 
   const faqs = [
     {
-      q: "How does Amazon Bedrock help in filing civic complaints?",
-      a: "Citizens often write informal notes like 'water is pooling near the school road'. Amazon Bedrock instantly translates this into an official, structured municipal grievance with recommended categorization, severity rating, and an executive brief for field engineers, preserving all user facts.",
+      q: "How does the AI help me write a better complaint?",
+      a: "Most people write informal notes — 'water is pooling near the school road'. The AI turns that into a structured complaint with the right category and severity, while keeping everything you wrote.",
     },
     {
-      q: "Can I track my complaint without logging in every day?",
-      a: "Yes. Every report receives a unique public Reference ID (e.g., CIV-2026-10492). You can input this reference on our Public Issues page or bookmark the tracking URL to view live status transitions and official remarks.",
+      q: "Can I track my complaint without an account?",
+      a: "Yes. Every report gets a unique reference number (like CIV-2026-10492). Bookmark the link or note the ID to check updates anytime.",
     },
     {
-      q: "Where are photos stored?",
-      a: "Photos are uploaded directly from your browser to Amazon S3 buckets via secure presigned cryptographic URLs. Your images are safely stored and linked to the complaint record in PostgreSQL.",
+      q: "Where are my photos stored?",
+      a: "Photos are stored securely on Amazon S3 and linked to your complaint. Only authorised reviewers can access them.",
     },
     {
-      q: "Can anyone become an administrator?",
-      a: "No. Role-based access control (RBAC) is enforced strictly on the server via Auth.js. Administrator accounts are provisioned via secure administrative processes, preventing any unauthorized privilege escalation.",
+      q: "Who can be an administrator?",
+      a: "Administrators are provisioned separately — no one can self-assign that role through the app.",
     },
   ];
 
@@ -125,10 +118,6 @@ export function LandingPageContent({ stats, recentComplaints }: LandingProps) {
         <div className="absolute inset-0 bg-[radial-gradient(#0D9488_1px,transparent_1px)] [background-size:24px_24px] opacity-15" />
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto space-y-6">
-            <div className="inline-flex items-center gap-2 rounded-full border border-teal-400/30 bg-teal-500/10 px-4 py-1.5 text-xs font-semibold text-teal-300 backdrop-blur">
-              <Sparkles className="h-3.5 w-3.5" />
-              Powered by Open-Source AI (Llama 3.3) &amp; NeonDB PostgreSQL
-            </div>
 
             <h1 className="text-4xl font-extrabold tracking-tight sm:text-6xl text-white">
               Your Community. <br className="hidden sm:inline" />
@@ -136,9 +125,7 @@ export function LandingPageContent({ stats, recentComplaints }: LandingProps) {
             </h1>
 
             <p className="text-lg sm:text-xl text-slate-300 leading-relaxed max-w-2xl mx-auto">
-              Report local civic issues, track their progress, and help build
-              cleaner, safer, better communities with AI-powered civic
-              intelligence.
+              Report local infrastructure problems, track their status, and see your city improve.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
@@ -169,25 +156,24 @@ export function LandingPageContent({ stats, recentComplaints }: LandingProps) {
             <div className="text-center">
               <p className="text-3xl font-extrabold text-white">{stats.totalReports}</p>
               <p className="text-xs font-medium text-slate-300 uppercase tracking-wider mt-1">
-                Total Complaints Logged
-              </p>
+                Reports submitted              </p>
             </div>
             <div className="text-center border-l border-white/10">
               <p className="text-3xl font-extrabold text-teal-400">{stats.resolved}</p>
               <p className="text-xs font-medium text-slate-300 uppercase tracking-wider mt-1">
-                Resolved by Municipalities
+                Resolved
               </p>
             </div>
             <div className="text-center border-l border-white/10">
               <p className="text-3xl font-extrabold text-amber-400">{stats.inProgress}</p>
               <p className="text-xs font-medium text-slate-300 uppercase tracking-wider mt-1">
-                Active Field Operations
+                In progress
               </p>
             </div>
             <div className="text-center border-l border-white/10">
               <p className="text-3xl font-extrabold text-blue-400">{stats.underReview}</p>
               <p className="text-xs font-medium text-slate-300 uppercase tracking-wider mt-1">
-                Under Administrative Triage
+                Under review
               </p>
             </div>
           </div>
@@ -199,13 +185,13 @@ export function LandingPageContent({ stats, recentComplaints }: LandingProps) {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-2xl mx-auto mb-16">
             <h2 className="text-xs font-bold uppercase tracking-wider text-[#0D9488]">
-              Seamless Civic Flow
+              
             </h2>
             <h3 className="text-3xl font-bold tracking-tight text-slate-900 mt-2">
               How CivicLens Works
             </h3>
             <p className="text-sm text-slate-600 mt-3">
-              From informal neighborhood observation to verified municipal resolution in four transparent stages.
+              Four steps from report to resolution.
             </p>
           </div>
 
@@ -235,14 +221,11 @@ export function LandingPageContent({ stats, recentComplaints }: LandingProps) {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-2xl mx-auto mb-16">
             <h2 className="text-xs font-bold uppercase tracking-wider text-[#0D9488]">
-              Comprehensive Coverage
+              
             </h2>
             <h3 className="text-3xl font-bold tracking-tight text-slate-900 mt-2">
-              Common Civic Issues We Solve
+              What You Can Report
             </h3>
-            <p className="text-sm text-slate-600 mt-3">
-              Citizens can document hazards across six critical municipal sectors.
-            </p>
           </div>
 
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -275,29 +258,28 @@ export function LandingPageContent({ stats, recentComplaints }: LandingProps) {
                 <Bot className="h-3.5 w-3.5 mr-1" /> Open-Source AI Intelligence
               </Badge>
               <h3 className="text-3xl sm:text-4xl font-extrabold tracking-tight">
-                Transforming Informal Notes into Municipal Action Plans
+                Write it in plain language. We handle the rest.
               </h3>
               <p className="text-sm text-slate-300 leading-relaxed">
-                Citizens shouldn&apos;t need to learn bureaucratic terminology to report a pothole.
-                Powered by state-of-the-art open source models (Meta Llama 3.3 70B &amp; Mistral via OpenRouter), CivicLens interprets casual speech, suggests precise categories, assesses hazard severity, and drafts executive summaries for city engineers.
+                You don&apos;t need to know the right department or use official terminology. Describe the problem in plain language and the AI formats it into a proper complaint — with the right category, severity, and a clear summary for the reviewer.
               </p>
               <div className="space-y-3 pt-2">
                 <div className="flex items-start gap-3">
                   <CheckCircle2 className="h-5 w-5 text-teal-400 flex-shrink-0 mt-0.5" />
                   <p className="text-xs text-slate-200">
-                    <strong className="text-white">Strict Fact Preservation:</strong> The model never hallucinates facts, locations, or damages.
+                    <strong className="text-white">Your facts, unchanged:</strong> The AI only uses what you wrote — no assumptions.
                   </p>
                 </div>
                 <div className="flex items-start gap-3">
                   <CheckCircle2 className="h-5 w-5 text-teal-400 flex-shrink-0 mt-0.5" />
                   <p className="text-xs text-slate-200">
-                    <strong className="text-white">Community Trend Synthesis:</strong> Aggregates live database statistics to pinpoint recurring local infrastructure bottlenecks.
+                    <strong className="text-white">Spot patterns:</strong> See which issues are most common in your area.
                   </p>
                 </div>
                 <div className="flex items-start gap-3">
                   <CheckCircle2 className="h-5 w-5 text-teal-400 flex-shrink-0 mt-0.5" />
                   <p className="text-xs text-slate-200">
-                    <strong className="text-white">Citizen Autonomy:</strong> Citizens review, edit, and approve all AI suggestions prior to submission.
+                    <strong className="text-white">You stay in control:</strong> Review and edit every AI suggestion before submitting.
                   </p>
                 </div>
               </div>
@@ -307,10 +289,10 @@ export function LandingPageContent({ stats, recentComplaints }: LandingProps) {
             <div className="rounded-2xl border border-white/20 bg-white/10 p-6 backdrop-blur shadow-2xl space-y-4">
               <div className="flex items-center justify-between border-b border-white/10 pb-3">
                 <span className="text-xs font-mono text-teal-300">
-                  OPENROUTER // Meta-Llama-3.3-70B-Instruct
+                  AI ASSISTANT
                 </span>
                 <span className="rounded bg-teal-500/20 px-2 py-0.5 text-[10px] text-teal-200">
-                  Open Weights
+                  Free & Open Source
                 </span>
               </div>
               <div className="rounded-lg bg-black/40 p-3 text-xs text-slate-300 space-y-1">
@@ -344,10 +326,10 @@ export function LandingPageContent({ stats, recentComplaints }: LandingProps) {
           <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-12">
             <div>
               <h2 className="text-xs font-bold uppercase tracking-wider text-[#0D9488]">
-                Real-Time Citizen Reports
+                
               </h2>
               <h3 className="text-3xl font-bold tracking-tight text-slate-900 mt-1">
-                Recent Community Submissions
+                Recent Reports
               </h3>
             </div>
             <Link href="/issues" className="mt-4 sm:mt-0">
@@ -397,10 +379,10 @@ export function LandingPageContent({ stats, recentComplaints }: LandingProps) {
         <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-xs font-bold uppercase tracking-wider text-[#0D9488]">
-              Transparency &amp; Technology
+              
             </h2>
             <h3 className="text-3xl font-bold tracking-tight text-slate-900 mt-2">
-              Frequently Asked Questions
+              Common Questions
             </h3>
           </div>
 
