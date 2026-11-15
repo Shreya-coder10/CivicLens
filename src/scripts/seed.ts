@@ -1,67 +1,55 @@
-import { PrismaClient } from "@prisma/client";
+import { getDb, ensureTablesExist } from "../lib/db";
 import bcrypt from "bcryptjs";
 
-const prisma = new PrismaClient();
-
 async function main() {
-  console.log("🌱 Starting CivicLens database seeding...");
+  console.log("🌱 Starting CivicLens NeonDB database seeding...");
 
-  // Clear existing demonstration data if any
-  await prisma.adminRemark.deleteMany({});
-  await prisma.complaintHistory.deleteMany({});
-  await prisma.complaintImage.deleteMany({});
-  await prisma.complaint.deleteMany({});
-  await prisma.user.deleteMany({});
+  const sql = getDb();
+  if (!sql) {
+    console.error("❌ DATABASE_URL is not set or contains placeholder. Set your NeonDB connection string in .env");
+    process.exit(1);
+  }
+
+  // Ensure tables exist first
+  await ensureTablesExist();
+
+  // Clear existing demo records
+  await sql`DELETE FROM admin_remarks;`;
+  await sql`DELETE FROM complaint_history;`;
+  await sql`DELETE FROM complaint_images;`;
+  await sql`DELETE FROM complaints;`;
+  await sql`DELETE FROM users;`;
 
   // 1. Create Initial Administrator Account
   const adminPassword = process.env.INITIAL_ADMIN_PASSWORD || "Admin@CivicLens2026!";
   const adminPasswordHash = await bcrypt.hash(adminPassword, 10);
+  const adminId = "usr_admin_01";
 
-  const adminUser = await prisma.user.create({
-    data: {
-      name: "City Infrastructure Commissioner",
-      email: "admin@civiclens.gov",
-      passwordHash: adminPasswordHash,
-      role: "ADMIN",
-    },
-  });
-  console.log(`✅ Admin account created: admin@civiclens.gov (Password from env or default)`);
+  await sql`
+    INSERT INTO users (id, name, email, password_hash, role)
+    VALUES (${adminId}, 'City Infrastructure Commissioner', 'admin@civiclens.gov', ${adminPasswordHash}, 'ADMIN');
+  `;
+  console.log("✅ Admin account created: admin@civiclens.gov");
 
   // 2. Create Sample Citizen Accounts
   const citizenPasswordHash = await bcrypt.hash("Citizen@123!", 10);
+  const citizen1Id = "usr_citizen_01";
+  const citizen2Id = "usr_citizen_02";
+  const citizen3Id = "usr_citizen_03";
 
-  const citizen1 = await prisma.user.create({
-    data: {
-      name: "Aarav Sharma",
-      email: "aarav.sharma@example.com",
-      passwordHash: citizenPasswordHash,
-      role: "CITIZEN",
-    },
-  });
+  await sql`
+    INSERT INTO users (id, name, email, password_hash, role)
+    VALUES 
+      (${citizen1Id}, 'Aarav Sharma', 'aarav.sharma@example.com', ${citizenPasswordHash}, 'CITIZEN'),
+      (${citizen2Id}, 'Priya Patel', 'priya.patel@example.com', ${citizenPasswordHash}, 'CITIZEN'),
+      (${citizen3Id}, 'Rohan Mukherjee', 'rohan.mukherjee@example.com', ${citizenPasswordHash}, 'CITIZEN');
+  `;
+  console.log("✅ 3 Citizen accounts created");
 
-  const citizen2 = await prisma.user.create({
-    data: {
-      name: "Priya Patel",
-      email: "priya.patel@example.com",
-      passwordHash: citizenPasswordHash,
-      role: "CITIZEN",
-    },
-  });
-
-  const citizen3 = await prisma.user.create({
-    data: {
-      name: "Rohan Mukherjee",
-      email: "rohan.mukherjee@example.com",
-      passwordHash: citizenPasswordHash,
-      role: "CITIZEN",
-    },
-  });
-  console.log(`✅ 3 Citizen accounts created`);
-
-  // 3. Realistic Civic Complaints Dataset with Real Geographic Coordinates
-  // Centered around metropolitan urban corridors
+  // 3. Realistic Civic Complaints Dataset
   const sampleComplaints = [
     {
+      id: "cmp_01",
       referenceId: "CIV-2026-10492",
       title: "Severe Pothole Cluster and Road Subsidence on 4th Main Avenue",
       description:
@@ -74,38 +62,35 @@ async function main() {
       address: "4th Main Avenue, Near Metro Pillar 142, Indiranagar",
       latitude: 12.9784,
       longitude: 77.6408,
-      userId: citizen1.id,
-      images: [
-        {
-          s3Key: "demo/pothole-indiranagar.jpg",
-          url: "https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&w=800&q=80",
-          originalFilename: "road_hazard_indiranagar.jpg",
-          mimeType: "image/jpeg",
-          fileSize: 420100,
-        },
-      ],
+      userId: citizen1Id,
+      imageUrl: "https://images.unsplash.com/photo-1515162816999-a0c47dc192f7?auto=format&fit=crop&w=800&q=80",
       history: [
         {
-          previousStatus: "SUBMITTED",
+          id: "hist_01",
+          prev: "SUBMITTED",
           newStatus: "SUBMITTED",
           remarks: "Initial report logged via CivicLens Mobile Web",
-          changedBy: citizen1.name,
+          by: "Aarav Sharma",
         },
         {
-          previousStatus: "SUBMITTED",
+          id: "hist_02",
+          prev: "SUBMITTED",
           newStatus: "UNDER_REVIEW",
           remarks: "Dispatched to Zone 3 Highway Operations division",
-          changedBy: adminUser.name,
+          by: "City Infrastructure Commissioner",
         },
         {
-          previousStatus: "UNDER_REVIEW",
+          id: "hist_03",
+          prev: "UNDER_REVIEW",
           newStatus: "IN_PROGRESS",
           remarks: "Asphalt patching crew and steamroller scheduled on site",
-          changedBy: adminUser.name,
+          by: "City Infrastructure Commissioner",
         },
       ],
+      remark: "Priority assigned by Municipal Dispatch. Work order referenced: WO-CIV-2026-10492.",
     },
     {
+      id: "cmp_02",
       referenceId: "CIV-2026-10834",
       title: "Overflowing Garbage Dump and Biomass Accumulation near Vegetable Market",
       description:
@@ -118,32 +103,28 @@ async function main() {
       address: "Old Subzi Mandi Road, Sector 12 Market Complex",
       latitude: 12.9856,
       longitude: 77.6124,
-      userId: citizen2.id,
-      images: [
-        {
-          s3Key: "demo/garbage-market.jpg",
-          url: "https://images.unsplash.com/photo-1530587191325-3db32d826c18?auto=format&fit=crop&w=800&q=80",
-          originalFilename: "market_waste_sector12.jpg",
-          mimeType: "image/jpeg",
-          fileSize: 580920,
-        },
-      ],
+      userId: citizen2Id,
+      imageUrl: "https://images.unsplash.com/photo-1530587191325-3db32d826c18?auto=format&fit=crop&w=800&q=80",
       history: [
         {
-          previousStatus: "SUBMITTED",
+          id: "hist_04",
+          prev: "SUBMITTED",
           newStatus: "SUBMITTED",
           remarks: "Report filed with photo attachment",
-          changedBy: citizen2.name,
+          by: "Priya Patel",
         },
         {
-          previousStatus: "SUBMITTED",
+          id: "hist_05",
+          prev: "SUBMITTED",
           newStatus: "UNDER_REVIEW",
           remarks: "Notified Solid Waste Management Field Inspector",
-          changedBy: adminUser.name,
+          by: "City Infrastructure Commissioner",
         },
       ],
+      remark: "Solid waste sanitary supervisor dispatched for inspection.",
     },
     {
+      id: "cmp_03",
       referenceId: "CIV-2026-11209",
       title: "High-Pressure Water Main Pipe Burst and Road Flooding",
       description:
@@ -156,38 +137,35 @@ async function main() {
       address: "Crossroad 7, Near Central Water Tank, Koramangala",
       latitude: 12.9352,
       longitude: 77.6245,
-      userId: citizen3.id,
-      images: [
-        {
-          s3Key: "demo/water-burst.jpg",
-          url: "https://images.unsplash.com/photo-1584438784894-089d6a62b8fa?auto=format&fit=crop&w=800&q=80",
-          originalFilename: "water_main_leak.jpg",
-          mimeType: "image/jpeg",
-          fileSize: 312400,
-        },
-      ],
+      userId: citizen3Id,
+      imageUrl: "https://images.unsplash.com/photo-1584438784894-089d6a62b8fa?auto=format&fit=crop&w=800&q=80",
       history: [
         {
-          previousStatus: "SUBMITTED",
+          id: "hist_06",
+          prev: "SUBMITTED",
           newStatus: "SUBMITTED",
           remarks: "Emergency pipeline report submitted",
-          changedBy: citizen3.name,
+          by: "Rohan Mukherjee",
         },
         {
-          previousStatus: "SUBMITTED",
+          id: "hist_07",
+          prev: "SUBMITTED",
           newStatus: "IN_PROGRESS",
           remarks: "Valve 4 shut off; pipeline welding team deployed",
-          changedBy: adminUser.name,
+          by: "City Infrastructure Commissioner",
         },
         {
-          previousStatus: "IN_PROGRESS",
+          id: "hist_08",
+          prev: "IN_PROGRESS",
           newStatus: "RESOLVED",
           remarks: "Replaced 3.5m cast-iron pipe section. Pressure restored and road stabilized.",
-          changedBy: adminUser.name,
+          by: "City Infrastructure Commissioner",
         },
       ],
+      remark: "Emergency pipe section replaced and pressure equalized.",
     },
     {
+      id: "cmp_04",
       referenceId: "CIV-2026-11540",
       title: "Non-Functional Streetlights on Public School Transit Corridor",
       description:
@@ -200,24 +178,28 @@ async function main() {
       address: "Govt School Road, HSR Layout Sector 3",
       latitude: 12.9116,
       longitude: 77.6389,
-      userId: citizen1.id,
-      images: [],
+      userId: citizen1Id,
+      imageUrl: null,
       history: [
         {
-          previousStatus: "SUBMITTED",
+          id: "hist_09",
+          prev: "SUBMITTED",
           newStatus: "SUBMITTED",
           remarks: "Report filed by resident",
-          changedBy: citizen1.name,
+          by: "Aarav Sharma",
         },
         {
-          previousStatus: "SUBMITTED",
+          id: "hist_10",
+          prev: "SUBMITTED",
           newStatus: "APPROVED",
           remarks: "Approved for LED luminaire replacement batch #42",
-          changedBy: adminUser.name,
+          by: "City Infrastructure Commissioner",
         },
       ],
+      remark: null,
     },
     {
+      id: "cmp_05",
       referenceId: "CIV-2026-11881",
       title: "Blocked Stormwater Drain Culvert Causing Stagnant Backflow",
       description:
@@ -230,18 +212,21 @@ async function main() {
       address: "Lakeview Road, Near BDA Park Gate 2, BTM Layout",
       latitude: 12.9166,
       longitude: 77.6101,
-      userId: citizen2.id,
-      images: [],
+      userId: citizen2Id,
+      imageUrl: null,
       history: [
         {
-          previousStatus: "SUBMITTED",
+          id: "hist_11",
+          prev: "SUBMITTED",
           newStatus: "SUBMITTED",
           remarks: "Report submitted with coordinates",
-          changedBy: citizen2.name,
+          by: "Priya Patel",
         },
       ],
+      remark: null,
     },
     {
+      id: "cmp_06",
       referenceId: "CIV-2026-12015",
       title: "Collapsed Concrete Pedestrian Footbridge Railing",
       description:
@@ -254,24 +239,28 @@ async function main() {
       address: "Railway Canal Footpath, Malleshwaram 8th Cross",
       latitude: 13.0034,
       longitude: 77.5685,
-      userId: citizen3.id,
-      images: [],
+      userId: citizen3Id,
+      imageUrl: null,
       history: [
         {
-          previousStatus: "SUBMITTED",
+          id: "hist_12",
+          prev: "SUBMITTED",
           newStatus: "SUBMITTED",
           remarks: "Report submitted",
-          changedBy: citizen3.name,
+          by: "Rohan Mukherjee",
         },
         {
-          previousStatus: "SUBMITTED",
+          id: "hist_13",
+          prev: "SUBMITTED",
           newStatus: "IN_PROGRESS",
           remarks: "Emergency yellow safety barricades erected; structural fabrication underway",
-          changedBy: adminUser.name,
+          by: "City Infrastructure Commissioner",
         },
       ],
+      remark: "Emergency safety barricades installed.",
     },
     {
+      id: "cmp_07",
       referenceId: "CIV-2026-12199",
       title: "Request for Relocation of Unused Private Billboard Blocking Traffic Sightline",
       description:
@@ -284,60 +273,73 @@ async function main() {
       address: "Bannerghatta Main Road, Opposite Shopper Stop",
       latitude: 12.8942,
       longitude: 77.5991,
-      userId: citizen1.id,
-      images: [],
+      userId: citizen1Id,
+      imageUrl: null,
       history: [
         {
-          previousStatus: "SUBMITTED",
+          id: "hist_14",
+          prev: "SUBMITTED",
           newStatus: "SUBMITTED",
           remarks: "Report submitted",
-          changedBy: citizen1.name,
+          by: "Aarav Sharma",
         },
         {
-          previousStatus: "SUBMITTED",
+          id: "hist_15",
+          prev: "SUBMITTED",
           newStatus: "REJECTED",
           remarks: "Site inspection concluded signage is on private demarcated land. Referred to Zonal Town Planning Authority.",
-          changedBy: adminUser.name,
+          by: "City Infrastructure Commissioner",
         },
       ],
+      remark: "Out of municipal scope; referred to planning authority.",
     },
   ];
 
-  for (const item of sampleComplaints) {
-    const { images, history, ...complaintData } = item;
-    const complaint = await prisma.complaint.create({
-      data: {
-        ...(complaintData as any),
-        images: {
-          create: images as any,
-        },
-        history: {
-          create: history as any,
-        },
-      },
-    });
+  for (const c of sampleComplaints) {
+    await sql`
+      INSERT INTO complaints (
+        id, reference_id, title, description, ai_summary, category, severity, status, address, latitude, longitude, user_id
+      ) VALUES (
+        ${c.id}, ${c.referenceId}, ${c.title}, ${c.description}, ${c.aiSummary}, ${c.category}, ${c.severity}, ${c.status}, ${c.address}, ${c.latitude}, ${c.longitude}, ${c.userId}
+      );
+    `;
 
-    // Add sample admin remark for in-progress and under-review items
-    if (item.status === "IN_PROGRESS" || item.status === "UNDER_REVIEW") {
-      await prisma.adminRemark.create({
-        data: {
-          complaintId: complaint.id,
-          adminId: adminUser.id,
-          remark: `Priority assigned by Municipal Dispatch. Work order referenced: WO-${complaint.referenceId}.`,
-        },
-      });
+    if (c.imageUrl) {
+      await sql`
+        INSERT INTO complaint_images (
+          id, complaint_id, s3_key, url, original_filename, mime_type, file_size
+        ) VALUES (
+          ${`img_${c.id}`}, ${c.id}, ${`demo/${c.referenceId}.jpg`}, ${c.imageUrl}, 'evidence.jpg', 'image/jpeg', 350000
+        );
+      `;
+    }
+
+    for (const h of c.history) {
+      await sql`
+        INSERT INTO complaint_history (
+          id, complaint_id, previous_status, new_status, remarks, changed_by
+        ) VALUES (
+          ${h.id}, ${c.id}, ${h.prev}, ${h.newStatus}, ${h.remarks}, ${h.by}
+        );
+      `;
+    }
+
+    if (c.remark) {
+      await sql`
+        INSERT INTO admin_remarks (
+          id, complaint_id, admin_id, remark
+        ) VALUES (
+          ${`rem_${c.id}`}, ${c.id}, ${adminId}, ${c.remark}
+        );
+      `;
     }
   }
 
-  console.log(`✅ ${sampleComplaints.length} sample complaints successfully seeded!`);
-  console.log("✨ Seeding completed successfully.");
+  console.log(`✅ ${sampleComplaints.length} Sample complaints seeded successfully!`);
+  console.log("✨ Seeding completed successfully on NeonDB.");
 }
 
-main()
-  .catch((e) => {
-    console.error("❌ Seeding failed:", e);
-    process.exit(1);
-  })
-  .finally(async () => {
-    await prisma.$disconnect();
-  });
+main().catch((err) => {
+  console.error("Seeding error:", err);
+  process.exit(1);
+});

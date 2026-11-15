@@ -1,22 +1,43 @@
 import { getServerAuthSession } from "@/lib/auth";
-import prisma from "@/lib/prisma";
+import { getDb } from "@/lib/db";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { User, Mail, ShieldCheck, Calendar, FileText } from "lucide-react";
 import { formatDate } from "@/lib/utils";
 
+export const dynamic = "force-dynamic";
+
 export default async function ProfilePage() {
   const session = await getServerAuthSession();
   const userId = (session?.user as any)?.id;
+  const sql = getDb();
 
-  const user = await prisma.user.findUnique({
-    where: { id: userId },
-    include: {
-      _count: { select: { complaints: true } },
-    },
-  });
+  let user = {
+    name: session?.user?.name || "Resident Citizen",
+    email: session?.user?.email || "citizen@example.com",
+    role: (session?.user as any)?.role || "CITIZEN",
+    createdAt: new Date().toISOString(),
+    complaintsCount: 0,
+  };
 
-  if (!user) return null;
+  if (sql && userId) {
+    try {
+      const rows: any = await sql`
+        SELECT u.id, u.name, u.email, u.role, u.created_at as "createdAt",
+               COUNT(c.id)::int as "complaintsCount"
+        FROM users u
+        LEFT JOIN complaints c ON u.id = c.user_id
+        WHERE u.id = ${userId}
+        GROUP BY u.id, u.name, u.email, u.role, u.created_at
+        LIMIT 1;
+      `;
+      if (rows && rows.length > 0) {
+        user = rows[0];
+      }
+    } catch (err) {
+      console.warn("DB profile query error, showing session data:", err);
+    }
+  }
 
   return (
     <div className="space-y-6">
@@ -84,7 +105,7 @@ export default async function ProfilePage() {
                 Total Civic Reports Filed
               </span>
               <p className="text-4xl font-extrabold text-[#172554] mt-1">
-                {user._count.complaints}
+                {user.complaintsCount || 0}
               </p>
               <p className="text-[11px] text-slate-500 mt-1">
                 Every report filed directly benefits local neighborhood safety and cleanliness.

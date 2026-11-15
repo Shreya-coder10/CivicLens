@@ -101,7 +101,7 @@ export default async function ComplaintDetailsPage({
                 <strong>{formatCategoryName(complaint.category)}</strong>:
               </p>
               <div className="flex flex-wrap gap-2 pt-1">
-                {duplicates.map((d) => (
+                {duplicates.map((d: any) => (
                   <Link
                     key={d.id}
                     href={`/issues/${d.id}`}
@@ -181,7 +181,7 @@ export default async function ComplaintDetailsPage({
                     Photographic Attachments ({complaint.images.length})
                   </h3>
                   <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
-                    {complaint.images.map((img) => (
+                    {complaint.images.map((img: any) => (
                       <a
                         key={img.id}
                         href={img.url}
@@ -215,7 +215,7 @@ export default async function ComplaintDetailsPage({
                 </CardTitle>
               </CardHeader>
               <CardContent className="p-4 space-y-3">
-                {complaint.adminRemarks.map((remark) => (
+                {complaint.adminRemarks.map((remark: any) => (
                   <div
                     key={remark.id}
                     className="rounded-lg border border-slate-100 bg-slate-50/70 p-3 space-y-1"

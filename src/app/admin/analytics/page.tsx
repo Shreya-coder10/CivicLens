@@ -42,7 +42,7 @@ export default async function AdminAnalyticsPage() {
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
-            {topLocations.map((loc, idx) => (
+            {topLocations.map((loc: any, idx: number) => (
               <div
                 key={idx}
                 className="rounded-lg border border-slate-100 bg-slate-50 p-3 space-y-1"

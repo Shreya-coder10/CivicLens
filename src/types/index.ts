@@ -56,7 +56,7 @@ export interface AdminRemarkItem {
   admin?: {
     id: string;
     name: string;
-    email: string;
+    email?: string;
   };
 }
 

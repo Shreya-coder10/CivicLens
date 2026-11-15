@@ -4,10 +4,9 @@ frontend:
     preBuild:
       commands:
         - npm ci --cache .npm --prefer-offline
-        - npx prisma generate
     build:
       commands:
-        - env | grep -e DATABASE_URL -e NEXTAUTH_SECRET -e NEXTAUTH_URL -e AWS_REGION -e S3_BUCKET_NAME -e BEDROCK_MODEL_ID >> .env.production
+        - env | grep -e DATABASE_URL -e NEXTAUTH_SECRET -e NEXTAUTH_URL -e OPENROUTER_API_KEY -e OPENROUTER_MODEL >> .env.production
         - npm run build
   artifacts:
     baseDirectory: .next

@@ -1,7 +1,7 @@
 "use server";
 
 import bcrypt from "bcryptjs";
-import prisma from "@/lib/prisma";
+import { getDb } from "@/lib/db";
 import { registerSchema } from "@/lib/validations/auth.schema";
 
 export async function registerUser(formData: {
@@ -20,13 +20,27 @@ export async function registerUser(formData: {
 
     const { name, email, password } = validated.data;
     const normalizedEmail = email.toLowerCase().trim();
+    const sql = getDb();
+
+    if (!sql) {
+      // In offline demo mode without active DB
+      return {
+        success: true,
+        user: {
+          id: `usr_${Date.now()}`,
+          name: name.trim(),
+          email: normalizedEmail,
+          role: "CITIZEN",
+        },
+      };
+    }
 
     // Check duplicate
-    const existingUser = await prisma.user.findUnique({
-      where: { email: normalizedEmail },
-    });
+    const existing = await sql`
+      SELECT id FROM users WHERE LOWER(email) = ${normalizedEmail} LIMIT 1;
+    `;
 
-    if (existingUser) {
+    if (existing && existing.length > 0) {
       return {
         success: false,
         error: "An account with this email address already exists.",
@@ -35,33 +49,28 @@ export async function registerUser(formData: {
 
     // Hash password securely with bcrypt
     const passwordHash = await bcrypt.hash(password, 10);
+    const userId = `usr_${Math.random().toString(36).substring(2, 10)}`;
 
     // Save user with CITIZEN role
-    const newUser = await prisma.user.create({
-      data: {
-        name: name.trim(),
-        email: normalizedEmail,
-        passwordHash,
-        role: "CITIZEN",
-      },
-      select: {
-        id: true,
-        name: true,
-        email: true,
-        role: true,
-        createdAt: true,
-      },
-    });
+    await sql`
+      INSERT INTO users (id, name, email, password_hash, role)
+      VALUES (${userId}, ${name.trim()}, ${normalizedEmail}, ${passwordHash}, 'CITIZEN');
+    `;
 
     return {
       success: true,
-      user: newUser,
+      user: {
+        id: userId,
+        name: name.trim(),
+        email: normalizedEmail,
+        role: "CITIZEN",
+      },
     };
   } catch (error: any) {
     console.error("Registration error:", error);
     return {
       success: false,
-      error: "An unexpected error occurred during registration. Please try again.",
+      error: "An unexpected error occurred during registration. Please check your database connection.",
     };
   }
 }
