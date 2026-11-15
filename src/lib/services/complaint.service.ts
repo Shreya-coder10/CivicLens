@@ -295,7 +295,8 @@ export class ComplaintService {
       queryStr += ` ORDER BY c.created_at DESC LIMIT $${params.length + 1}`;
       params.push(filters?.limit || 100);
 
-      const rows: any = await (sql as any)(queryStr, params);
+      const res: any = await (sql as any).query(queryStr, params);
+      const rows: any = res.rows || res;
 
       // Attach first image for cards
       const complaintIds = rows.map((r: any) => r.id);
@@ -404,7 +405,8 @@ export class ComplaintService {
       queryStr += ` ORDER BY c.created_at DESC LIMIT $${sqlParams.length + 1} OFFSET $${sqlParams.length + 2}`;
       sqlParams.push(pageSize, offset);
 
-      const items: any = await (sql as any)(queryStr, sqlParams);
+      const itemsRes: any = await (sql as any).query(queryStr, sqlParams);
+      const items: any = itemsRes.rows || itemsRes;
       const countRes: any = await sql`SELECT count(*)::int as count FROM complaints;`;
       const total = countRes[0]?.count || items.length;
 

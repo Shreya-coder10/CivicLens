@@ -2,7 +2,13 @@ import { neon, NeonQueryFunction } from "@neondatabase/serverless";
 
 function getDatabaseUrl(): string | null {
   const url = process.env.DATABASE_URL;
-  if (!url || url.includes("ep-placeholder") || url.includes("localhost:5432")) {
+  if (
+    !url ||
+    url.includes("YOUR_PASSWORD") ||
+    url.includes("YOUR-PROJECT") ||
+    url.includes("ep-placeholder") ||
+    url.includes("localhost:5432")
+  ) {
     return null;
   }
   return url;
@@ -35,8 +41,8 @@ export async function query<T = any>(
     return [];
   }
   try {
-    const rows = await (sql as any)(sqlQuery, params);
-    return rows as T[];
+    const res = await (sql as any).query(sqlQuery, params);
+    return (res.rows || res) as T[];
   } catch (error) {
     console.error("Database query error:", error);
     throw error;
