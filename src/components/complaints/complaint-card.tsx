@@ -24,7 +24,7 @@ export function ComplaintCard({ complaint }: ComplaintCardProps) {
   const firstImage = hasImages ? complaint.images![0].url : null;
 
   return (
-    <Card className="overflow-hidden hover:shadow-md transition-shadow border-slate-200 bg-white">
+    <Card className="card-elevated overflow-hidden border-slate-200 bg-white hover:border-teal-500/40 shadow-subtle flex flex-col justify-between">
       {firstImage && (
         <div className="relative h-44 w-full overflow-hidden bg-slate-100">
           <img

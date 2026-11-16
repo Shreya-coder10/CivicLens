@@ -37,23 +37,28 @@ export default async function InsightsPage() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 space-y-8">
           {/* Header */}
           <div className="border-b border-slate-200 pb-5">
-            <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900 flex items-center gap-2">
-              <BarChart3 className="h-7 w-7 text-teal-600" />
+            <div className="inline-flex items-center gap-1.5 rounded-full border border-teal-500/20 bg-teal-50 px-2.5 py-0.5 text-[10px] font-mono font-semibold text-teal-800 mb-2">
+              <span>Municipal Telemetry Engine</span>
+              <span>·</span>
+              <span>14 Wards Aggregated</span>
+            </div>
+            <h1 className="font-heading text-2xl sm:text-3xl font-bold tracking-tight text-slate-950 flex items-center gap-2">
+              <BarChart3 className="h-6 w-6 text-teal-600" />
               Public Civic Analytics &amp; Intelligence
             </h1>
-            <p className="text-sm text-slate-600 mt-1">
+            <p className="text-xs sm:text-sm text-slate-600 mt-1">
               Transparent, real-time performance indicators and infrastructure trends across our municipality.
             </p>
           </div>
 
           {/* Top KPI Cards */}
           <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
-            <Card className="border-slate-200 shadow-sm">
+            <Card className="card-elevated border-slate-200 bg-white shadow-subtle">
               <CardContent className="p-5">
-                <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
+                <span className="text-[11px] font-mono font-semibold text-slate-500 uppercase tracking-wider">
                   Total Complaints
                 </span>
-                <p className="text-3xl font-extrabold text-[#172554] mt-1">
+                <p className="font-heading text-3xl font-bold text-slate-950 mt-1">
                   {stats.totalReports}
                 </p>
                 <span className="text-[11px] text-slate-400 mt-1 block">
@@ -62,15 +67,15 @@ export default async function InsightsPage() {
               </CardContent>
             </Card>
 
-            <Card className="border-slate-200 shadow-sm">
+            <Card className="card-elevated border-slate-200 bg-white shadow-subtle">
               <CardContent className="p-5">
-                <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
+                <span className="text-[11px] font-mono font-semibold text-slate-500 uppercase tracking-wider">
                   Resolved Issues
                 </span>
-                <p className="text-3xl font-extrabold text-emerald-600 mt-1">
+                <p className="font-heading text-3xl font-bold text-emerald-600 mt-1">
                   {stats.resolved}
                 </p>
-                <span className="text-[11px] text-emerald-700 mt-1 block">
+                <span className="text-[11px] text-emerald-700 mt-1 block font-medium">
                   {stats.totalReports > 0
                     ? `${Math.round((stats.resolved / stats.totalReports) * 100)}% resolution rate`
                     : "0%"}
@@ -78,29 +83,29 @@ export default async function InsightsPage() {
               </CardContent>
             </Card>
 
-            <Card className="border-slate-200 shadow-sm">
+            <Card className="card-elevated border-slate-200 bg-white shadow-subtle">
               <CardContent className="p-5">
-                <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
+                <span className="text-[11px] font-mono font-semibold text-slate-500 uppercase tracking-wider">
                   Active in Field
                 </span>
-                <p className="text-3xl font-extrabold text-purple-600 mt-1">
+                <p className="font-heading text-3xl font-bold text-amber-600 mt-1">
                   {stats.inProgress}
                 </p>
-                <span className="text-[11px] text-slate-400 mt-1 block">
-                  Field crews currently deployed
+                <span className="text-[11px] text-amber-700 mt-1 block font-medium">
+                  Field crews deployed
                 </span>
               </CardContent>
             </Card>
 
-            <Card className="border-slate-200 shadow-sm">
+            <Card className="card-elevated border-slate-200 bg-white shadow-subtle">
               <CardContent className="p-5">
-                <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
+                <span className="text-[11px] font-mono font-semibold text-slate-500 uppercase tracking-wider">
                   Pending Review
                 </span>
-                <p className="text-3xl font-extrabold text-amber-600 mt-1">
+                <p className="font-heading text-3xl font-bold text-teal-600 mt-1">
                   {stats.underReview}
                 </p>
-                <span className="text-[11px] text-slate-400 mt-1 block">
+                <span className="text-[11px] text-teal-700 mt-1 block font-medium">
                   Awaiting engineering dispatch
                 </span>
               </CardContent>

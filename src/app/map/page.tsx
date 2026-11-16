@@ -60,17 +60,22 @@ export default async function CommunityMapPage({ searchParams }: MapPageProps) {
           {/* Header */}
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-200 pb-4">
             <div>
-              <h1 className="text-2xl font-bold tracking-tight text-slate-900 flex items-center gap-2">
-                <MapPin className="h-6 w-6 text-teal-600" />
-                Interactive Community Civic Map
+              <div className="inline-flex items-center gap-1.5 rounded-full border border-teal-500/20 bg-teal-50 px-2.5 py-0.5 text-[10px] font-mono font-semibold text-teal-800 mb-1">
+                <span>GIS Operations Map</span>
+                <span>·</span>
+                <span>Real-Time Proximity Clustering</span>
+              </div>
+              <h1 className="font-heading text-2xl font-bold tracking-tight text-slate-950 flex items-center gap-2">
+                <MapPin className="h-5 w-5 text-teal-600" />
+                Community Spatial Operations
               </h1>
               <p className="text-xs text-slate-600 mt-0.5">
-                Geospatial distribution of {mapData.length} active and resolved municipal reports.
+                Geospatial distribution of {mapData.length} active and resolved municipal reports with live status indicators.
               </p>
             </div>
             <div className="flex items-center gap-2">
               <Link href="/dashboard/report">
-                <Button size="sm" className="bg-[#172554] hover:bg-[#1e3a8a] text-white">
+                <Button size="sm" className="btn-premium bg-slate-950 hover:bg-slate-900 text-white font-medium shadow-subtle">
                   <PlusCircle className="mr-1.5 h-3.5 w-3.5 text-teal-400" />
                   Report at Location
                 </Button>

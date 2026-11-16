@@ -1,8 +1,11 @@
 const OPENROUTER_API_URL = "https://openrouter.ai/api/v1/chat/completions";
 
 // Default to top open-source models: Llama 3.3 70B or free tier open source
-export const DEFAULT_OPEN_SOURCE_MODEL =
-  process.env.OPENROUTER_MODEL || "meta-llama/llama-3.3-70b-instruct";
+export const DEFAULT_OPEN_SOURCE_MODEL = (
+  process.env.OPENROUTER_MODEL || "meta-llama/llama-3.3-70b-instruct"
+)
+  .replace(/['"]/g, "")
+  .trim();
 
 export function isOpenRouterConfigured(): boolean {
   return Boolean(process.env.OPENROUTER_API_KEY);

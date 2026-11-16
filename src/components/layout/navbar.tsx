@@ -38,22 +38,23 @@ export function Navbar() {
         {/* Brand & Status */}
         <div className="flex items-center space-x-4">
           <Link href="/" className="flex items-center space-x-2.5 group">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-slate-900 text-white shadow-sm ring-1 ring-slate-800 group-hover:bg-[#172554] transition-colors">
-              <ShieldAlert className="h-5 w-5 text-teal-400" />
+            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-slate-950 text-white shadow-subtle ring-1 ring-slate-800/80 group-hover:bg-slate-900 transition-all duration-200">
+              <ShieldAlert className="h-4.5 w-4.5 text-teal-400" />
             </div>
             <div className="flex flex-col">
-              <span className="text-xl font-bold tracking-tight text-slate-900">
-                Civic<span className="text-[#0D9488]">Lens</span>
+              <span className="font-heading text-lg font-bold tracking-tight text-slate-950">
+                Civic<span className="text-teal-600">Lens</span>
               </span>
             </div>
           </Link>
 
-          <div className="hidden lg:flex items-center gap-1.5 rounded-full border border-emerald-200 bg-emerald-50/70 px-2.5 py-0.5 text-[11px] font-medium text-emerald-800">
+          <div className="hidden lg:flex items-center gap-2 rounded-full border border-slate-200/80 bg-slate-50/90 px-3 py-1 text-[11px] font-medium text-slate-700 shadow-sm">
             <span className="relative flex h-2 w-2">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
               <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
             </span>
-            <span>Live Civic Network</span>
+            <span className="font-mono text-[10px] tracking-tight text-slate-500 uppercase">System:</span>
+            <span className="font-medium text-slate-900">Live SLA Dispatch</span>
           </div>
         </div>
 
@@ -104,7 +105,7 @@ export function Navbar() {
               )}
 
               <Link href={isAdmin ? "/admin/complaints" : "/dashboard/report"}>
-                <Button size="sm" className="bg-[#172554] hover:bg-[#1e3a8a] text-white">
+                <Button size="sm" className="btn-premium bg-slate-950 hover:bg-slate-900 text-white font-medium shadow-subtle">
                   <PlusCircle className="mr-1.5 h-4 w-4 text-teal-400" />
                   Report Issue
                 </Button>
@@ -126,16 +127,16 @@ export function Navbar() {
               </div>
             </div>
           ) : (
-            <div className="flex items-center space-x-2">
+            <div className="flex items-center space-x-2.5">
               <Link href="/login">
-                <Button variant="ghost" size="sm" className="text-slate-700">
+                <Button variant="ghost" size="sm" className="text-slate-700 hover:text-slate-950 font-medium">
                   Sign In
                 </Button>
               </Link>
               <Link href="/dashboard/report">
-                <Button size="sm" className="bg-[#172554] hover:bg-[#1e3a8a] text-white">
+                <Button size="sm" className="btn-premium bg-slate-950 hover:bg-slate-900 text-white font-medium shadow-subtle">
                   <PlusCircle className="mr-1.5 h-4 w-4 text-teal-400" />
-                  Report an Issue
+                  Report Issue
                 </Button>
               </Link>
             </div>

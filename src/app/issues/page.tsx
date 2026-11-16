@@ -59,15 +59,20 @@ export default async function IssuesPage({ searchParams }: IssuesPageProps) {
           {/* Header */}
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 pb-6">
             <div>
-              <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+              <div className="inline-flex items-center gap-1.5 rounded-full border border-teal-500/20 bg-teal-50 px-2.5 py-0.5 text-[10px] font-mono font-semibold text-teal-800 mb-2">
+                <span>Public Telemetry</span>
+                <span>·</span>
+                <span>All Municipal Wards</span>
+              </div>
+              <h1 className="font-heading text-2xl sm:text-3xl font-bold text-slate-950 tracking-tight">
                 Public Civic Issues
               </h1>
-              <p className="text-sm text-slate-600 mt-1">
-                Browse verified complaints logged by residents across municipal sectors.
+              <p className="text-xs sm:text-sm text-slate-600 mt-1">
+                Browse verified complaints logged by residents and tracked through municipal SLA resolution.
               </p>
             </div>
             <Link href="/dashboard/report">
-              <Button className="bg-[#172554] hover:bg-[#1e3a8a] text-white">
+              <Button className="btn-premium bg-slate-950 hover:bg-slate-900 text-white font-medium shadow-subtle">
                 <PlusCircle className="mr-2 h-4 w-4 text-teal-400" />
                 Report New Problem
               </Button>

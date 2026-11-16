@@ -17,9 +17,11 @@
     "@aws-sdk/s3-request-presigner": "^3.700.0",
     "@hookform/resolvers": "^3.9.0",
     "@neondatabase/serverless": "^0.10.4",
+    "aos": "^2.3.4",
     "bcryptjs": "^2.4.3",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "gsap": "^3.15.1",
     "leaflet": "^1.9.4",
     "lucide-react": "^0.460.0",
     "next": "^14.2.20",
@@ -35,6 +37,7 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
+    "@types/aos": "^3.0.8",
     "@types/bcryptjs": "^2.4.6",
     "@types/leaflet": "^1.9.14",
     "@types/node": "^20.17.6",

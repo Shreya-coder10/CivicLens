@@ -29,22 +29,19 @@ export function Footer() {
           {/* Brand info */}
           <div className="space-y-4 md:col-span-2">
             <div className="flex items-center space-x-2.5">
-              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-slate-900 text-white shadow-sm">
+              <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-slate-950 text-white shadow-subtle ring-1 ring-slate-800">
                 <ShieldAlert className="h-5 w-5 text-teal-400" />
               </div>
-              <span className="text-xl font-bold tracking-tight text-slate-900">
+              <span className="font-heading text-lg font-bold tracking-tight text-slate-950">
                 Civic<span className="text-teal-600">Lens</span>
               </span>
             </div>
-            <p className="max-w-md text-sm text-slate-600 font-medium">
-              &quot;See the problem. Report the issue. Improve your community.&quot;
+            <p className="max-w-md text-xs text-slate-500 leading-relaxed">
+              Open civic intelligence platform connecting citizen reports directly to municipal public works agencies with transparent SLA telemetry.
             </p>
-            <p className="text-xs text-slate-500 leading-relaxed max-w-md">
-              A transparent civic issue management platform connecting citizens with local municipal public works authorities for verified, data-driven community improvements.
-            </p>
-            <div className="flex items-center space-x-2 pt-1 text-xs text-slate-500">
+            <div className="flex items-center space-x-2 pt-1 text-[11px] text-slate-500 font-mono">
               <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600" />
-              <span>Public Audit Timeline • Direct Ward Dispatch • Open Intelligence</span>
+              <span>Public Audit Timeline · Direct Ward Dispatch · Open Data</span>
             </div>
           </div>
 
